@@ -4,6 +4,7 @@ import com.gateway.port.usecase.JwtUsecase;
 import com.gateway.vo.request.LoginRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -61,6 +62,7 @@ public class APIDrivingAdapter {
 }
 
 @Getter
+@Setter
 @Configuration
 @ConfigurationProperties("http.api")
 class APIInfo {
