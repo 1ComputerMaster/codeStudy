@@ -4,6 +4,7 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.ReadFrom;
 import io.lettuce.core.cluster.ClusterClientOptions;
 import io.lettuce.core.cluster.ClusterTopologyRefreshOptions;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +13,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -33,20 +33,25 @@ public class RedisConfig {
 
     @Value("${token.timer}")
     private long tokenTimer;
+
     @Bean
-    public ReactiveRedisTemplate<String, String> reactiveRedisTemplate() {
+    public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate() {
+
         ReactiveRedisConnectionFactory connectionFactory = connectionFactory();
-        RedisSerializer<String> serializer = new StringRedisSerializer();
-        RedisSerializationContext<String, String> serializationContext = RedisSerializationContext
-                .<String, String>newSerializationContext()
-                .key(serializer)
+
+        RedisSerializer<String> stringRedisSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        RedisSerializationContext<String, Object> serializationContext = RedisSerializationContext
+                .<String, Object>newSerializationContext(new GenericJackson2JsonRedisSerializer())
+                .key(stringRedisSerializer)
                 .value(serializer)
                 .hashKey(serializer)
                 .hashValue(serializer)
                 .build();
         return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
     }
-
+    @Bean
+    @Primary //
     public ReactiveRedisConnectionFactory connectionFactory() {
         // 클러스터 호스트 세팅
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(redisInfo.getNodes());

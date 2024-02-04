@@ -1,10 +1,11 @@
 package com.gateway.adapter.driving;
 
 import com.gateway.port.usecase.JwtUsecase;
-import com.gateway.vo.request.LoginRequest;
+import com.gateway.dto.vo.request.LoginRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class APIDrivingAdapter {
