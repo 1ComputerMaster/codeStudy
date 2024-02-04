@@ -1,0 +1,31 @@
+# Gradle 관련 파일
+.gradle/
+build/
+
+# IntelliJ IDEA 관련 파일
+.idea/
+*.iml
+*.iws
+
+# Eclipse 관련 파일
+.settings/
+.classpath
+.project
+
+# Mac OS 관련 파일
+.DS_Store
+
+# Windows 관련 파일
+Thumbs.db
+
+# Java 관련 파일
+*.class
+
+# 로그 파일
+*.log
+
+# 테스트 결과 파일
+test-results/
+
+# Spring Boot 관련 파일
+spring-boot-devtools.properties
