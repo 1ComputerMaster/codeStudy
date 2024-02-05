@@ -1,5 +1,8 @@
 package com.gateway.adapter.driving;
 
+import com.gateway.dto.entity.request.TokenEntity;
+import com.gateway.dto.vo.request.TokenRequest;
+import com.gateway.port.output.SavePort;
 import com.gateway.port.usecase.JwtUsecase;
 import com.gateway.dto.vo.request.LoginRequest;
 import lombok.Getter;
@@ -12,6 +15,8 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import java.util.Map;
@@ -24,6 +29,17 @@ public class APIDrivingAdapter {
     private final JwtUsecase jwtUsecase;
 
     private final APIInfo apiInfo;
+
+    private final SavePort savePort;
+    @PostMapping("/test")
+    public Mono<Boolean> test(@RequestBody TokenRequest tokenRequest){
+
+        Mono<Boolean> booleanMono = savePort.save(TokenEntity.builder()
+                        .accessToken(tokenRequest.getAccessToken())
+                        .refreshToken(tokenRequest.getRefreshToken())
+                .build());
+        return booleanMono;
+    }
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()

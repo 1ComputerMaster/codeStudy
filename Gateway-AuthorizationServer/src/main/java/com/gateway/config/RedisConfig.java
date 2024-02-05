@@ -18,6 +18,8 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.ReactiveHashOperations;
+import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.serializer.*;
 
@@ -26,7 +28,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Configuration
-@EnableCaching
 @RequiredArgsConstructor
 public class RedisConfig {
     private final RedisInfo redisInfo;
@@ -35,7 +36,7 @@ public class RedisConfig {
     private long tokenTimer;
 
     @Bean
-    public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate() {
+    public ReactiveHashOperations<String, String, Object> reactiveRedisOperations() {
 
         ReactiveRedisConnectionFactory connectionFactory = connectionFactory();
 
@@ -48,7 +49,7 @@ public class RedisConfig {
                 .hashKey(serializer)
                 .hashValue(serializer)
                 .build();
-        return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
+        return new ReactiveRedisTemplate<>(connectionFactory, serializationContext).opsForHash();
     }
     @Bean
     @Primary //
@@ -76,6 +77,7 @@ public class RedisConfig {
 //        redisClusterConfiguration.setPassword(redisInfo.getPassword());
         return new LettuceConnectionFactory(redisClusterConfiguration, clientConfiguration);
     }
+
 }
 
 @Data
