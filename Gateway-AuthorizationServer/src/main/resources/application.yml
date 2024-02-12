@@ -10,7 +10,6 @@ spring:
     redis:
       cluster:
         max-redirects: 5
-#        password: 1234
         nodes: 127.0.0.1:7000, 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
   datasource:
     hikari:
@@ -25,7 +24,7 @@ spring:
       routes:
         # User-service : 로그인
         - id: user-service
-          uri: lb://USER-SERVICE
+          uri: lb://USER-SERVICE #USER-Service는 유레카 서버에 등록된 application 이름이다.
           predicates:
             - Path=/user-service/login
             - Method=POST
@@ -57,7 +56,21 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka #유레카 서버에 등록합니다.
+      defaultZone: http://127.0.0.1:8787/eureka #유레카 서버에 등록합니다.
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    os:
+      enabled: true
+    java:
+      enabled: true
+    env:
+      enabled: true
 
 token:
   timer: 24

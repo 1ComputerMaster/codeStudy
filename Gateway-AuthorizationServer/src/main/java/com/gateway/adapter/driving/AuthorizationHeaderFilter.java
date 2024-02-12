@@ -29,6 +29,14 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     }
 
+    /**
+     * @apiNote 1. 일반적인 회원 가입 요청을 제외한 모든 요청은 이곳을 탐험한다. <br/> 
+     * 2. 즉, 모든 요청은 이곳의 필터를 지나는데 만일, 이미 accessToken이 존재하지만 또 다른 곳에서 동일한 유저로 요청시 토큰 삭제를 하고
+     *<br/>
+     * 3. 다시 재 로그인을 할 때는 정상 로그인을 할 수 있는 방식으로 구동시켰다.
+     * @param config
+     * @return
+     */
     @Override
     public GatewayFilter apply(Config config) {
 
