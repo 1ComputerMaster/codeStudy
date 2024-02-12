@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface SavePort {
     public Mono<Boolean> save(TokenEntity tokenEntity);
+    public Mono<Boolean> putIfPresent(String hash, String key, String value);
 }

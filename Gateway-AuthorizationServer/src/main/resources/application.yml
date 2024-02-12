@@ -12,6 +12,52 @@ spring:
         max-redirects: 5
 #        password: 1234
         nodes: 127.0.0.1:7000, 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+    url: jdbc:postgresql://127.0.0.1:5432/postgres
+    username: postgres
+    password: 5653
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+        # User-service : 로그인
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+          # User-service : 회원 가입
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+          # User-service : Etc
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka #유레카 서버에 등록합니다.
 
 token:
   timer: 24
