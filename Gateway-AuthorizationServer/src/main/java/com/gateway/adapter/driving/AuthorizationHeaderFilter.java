@@ -17,8 +17,8 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
-    private JwtUsecase jwtUsecase;
-    private SavePort savePort;
+    private final JwtUsecase jwtUsecase;
+    private final SavePort savePort;
     public AuthorizationHeaderFilter(JwtUsecase jwtUsecase, SavePort savePort){
         super(Config.class);
         this.jwtUsecase = jwtUsecase;
@@ -42,39 +42,30 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
-
+            ServerHttpResponse response = exchange.getResponse();
             if(!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)){
-                return onError(exchange, "No Authrization Header", HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.setComplete();
             }
 
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", "");
             //JWT 토큰 검증
             if(!jwtUsecase.validateToken(jwt)){
-                return onError(exchange, "Token Is not Valid", HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.setComplete();
             }
             String username = jwtUsecase.getUserInfo(jwt).get("username");
 
             savePort.putIfPresent("TOKEN",username,jwt)
                 .flatMap(ret -> {
                     if(!ret){
-                        return onError(exchange,"SECOND USER IS COMMING", HttpStatus.UNAUTHORIZED);
+                        response.setStatusCode(HttpStatus.UNAUTHORIZED);
                     }
-                    return Mono.just(true);
+                    return response.setComplete();
                 });
             return chain.filter(exchange);
         };
     }
-
-    //에러 처리 담당
-    //Mono : Spring MVC -> Spring WebFlux에서 사용하는 비동기식 데이터 처리타입(Mono:단일, Flux:복수)
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-
-        log.error(err);
-        return response.setComplete();
-    }
-
 
 }
