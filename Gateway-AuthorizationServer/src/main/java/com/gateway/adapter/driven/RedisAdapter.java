@@ -20,16 +20,28 @@ public class RedisAdapter implements SavePort {
         return redisOperations.put("TOKEN",UUID.randomUUID().toString(), tokenEntity);
     }
 
-    public Mono<Boolean> putIfPresent(String hash, String key, String value) {
+    /**
+     * 
+     * @param hash
+     * @param key
+     * @param tokenEntity
+     * @return 레디스 저장 성공 여부
+     * @apiNote
+     * <pre>
+     *     1. 해당 hash에
+     *
+     * </pre>
+     */
+    public Mono<Boolean> putIfPresent(String hash, String key, TokenEntity tokenEntity) {
         return redisOperations.hasKey(hash, key)
-                .flatMap(present -> {
-                    if (present) {
-                        redisOperations.remove(hash,key);
-                        return Mono.just(false);
-                    } else {
-                        return redisOperations.put(hash, key, value);
-                    }
-                });
+            .flatMap(present -> {
+                if (present) {
+                    redisOperations.remove(hash,key);
+                    return Mono.just(false);
+                } else {
+                    return redisOperations.put(hash, key, tokenEntity);
+                }
+            });
     }
 
 }
