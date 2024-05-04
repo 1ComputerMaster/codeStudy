@@ -1,4 +1,4 @@
-package com.gateway.dto.vo.request;
+package com.gateway.domain.vo.request;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.gateway.adapter.driven;
 
 import com.gateway.config.APIInfo;
-import com.gateway.dto.vo.request.LoginRequest;
+import com.gateway.domain.vo.request.LoginRequest;
 import com.gateway.port.output.WebClientPort;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;

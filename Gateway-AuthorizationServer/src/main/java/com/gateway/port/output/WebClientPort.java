@@ -1,6 +1,6 @@
 package com.gateway.port.output;
 
-import com.gateway.dto.vo.request.LoginRequest;
+import com.gateway.domain.vo.request.LoginRequest;
 import reactor.core.publisher.Mono;
 
 public interface WebClientPort {

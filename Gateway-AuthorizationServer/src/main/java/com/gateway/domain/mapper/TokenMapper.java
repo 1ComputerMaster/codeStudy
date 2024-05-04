@@ -1,7 +1,7 @@
-package com.gateway.dto.mapper;
+package com.gateway.domain.mapper;
 
-import com.gateway.dto.entity.request.TokenEntity;
-import com.gateway.dto.vo.TokenVO;
+import com.gateway.domain.entity.request.TokenEntity;
+import com.gateway.domain.vo.TokenVO;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
 package com.gateway.adapter.driven;
 
-import com.gateway.dto.entity.request.TokenEntity;
+import com.gateway.domain.entity.request.TokenEntity;
 import com.gateway.port.output.SavePort;
 import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Component;

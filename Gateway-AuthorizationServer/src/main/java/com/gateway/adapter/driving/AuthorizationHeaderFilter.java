@@ -1,12 +1,13 @@
 package com.gateway.adapter.driving;
 
-import com.gateway.dto.mapper.TokenMapper;
-import com.gateway.dto.vo.TokenVO;
+import com.gateway.domain.mapper.TokenMapper;
+import com.gateway.domain.vo.TokenVO;
 import com.gateway.port.output.SavePort;
 import com.gateway.port.usecase.JwtUsecase;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -42,6 +43,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
      *
      * @apiNote
      * <pre>
+     *     CustomFilter
      * 1. 일반적인 회원 가입 요청을 제외한 모든 요청은 이곳을 탐험한다.
      * 2. 즉, 모든 요청은 이곳의 필터를 지나는데 만일, 이미 accessToken이 존재하지만 또 다른 곳에서 동일한 유저로 요청시 토큰 삭제를 하고
      * 3. 다시 재 로그인을 할 때는 정상 로그인을 할 수 있는 방식으로 구동시켰다.
@@ -51,7 +53,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
      */
     @Override
     public GatewayFilter apply(Config config) {
-
+        //Custom Pre Filter for JWT
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
@@ -85,6 +87,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     }
                     return response.setComplete();
                 });
+            // Post Filter로 이후 구동이 된 후에 어떠한 행위를 할 지 지정 할 수 있습니다.
             return chain.filter(exchange);
         };
     }

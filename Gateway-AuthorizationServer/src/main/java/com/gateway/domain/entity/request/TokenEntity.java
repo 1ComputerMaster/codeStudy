@@ -1,4 +1,4 @@
-package com.gateway.dto.entity.request;
+package com.gateway.domain.entity.request;
 
 import lombok.Builder;
 import lombok.Getter;

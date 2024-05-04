@@ -1,6 +1,6 @@
 package com.gateway.port.usecase;
 
-import com.gateway.dto.vo.TokenVO;
+import com.gateway.domain.vo.TokenVO;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package com.gateway.port.input;
 
-import com.gateway.dto.vo.TokenVO;
+import com.gateway.domain.vo.TokenVO;
 import com.gateway.port.usecase.JwtUsecase;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

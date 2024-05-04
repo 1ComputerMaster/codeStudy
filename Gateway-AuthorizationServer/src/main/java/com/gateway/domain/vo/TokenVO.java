@@ -1,4 +1,4 @@
-package com.gateway.dto.vo;
+package com.gateway.domain.vo;
 
 import lombok.Builder;
 import lombok.Getter;
