@@ -13,7 +13,7 @@ public class WebSecurity {
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity serverHttpSecurity){
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/user/**")
+                        .pathMatchers("/**")
                         .permitAll())
                    .httpBasic(Customizer.withDefaults())
                    .formLogin(Customizer.withDefaults());

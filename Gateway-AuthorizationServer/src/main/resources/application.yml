@@ -30,7 +30,7 @@ spring:
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+#            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
           # User-service : 회원 가입
         - id: user-service
           uri: lb://USER-SERVICE
@@ -39,7 +39,7 @@ spring:
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+#            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
           # User-service : Etc
         - id: user-service
           uri: lb://USER-SERVICE
@@ -48,8 +48,8 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
+#            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+#            - AuthorizationHeaderFilter
 
 eureka:
   client:
@@ -57,7 +57,8 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8787/eureka #유레카 서버에 등록합니다.
-
+    registry-fetch-interval-seconds: 10
+    disable-delta: true
 
 management:
   endpoints:
