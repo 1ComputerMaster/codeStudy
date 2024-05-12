@@ -48,6 +48,13 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+
 #            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 #            - AuthorizationHeaderFilter
 
@@ -62,6 +69,8 @@ eureka:
 
 management:
   endpoints:
+    health:
+      show-details: always
     web:
       exposure:
         include: "*"
